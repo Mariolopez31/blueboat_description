@@ -1,13 +1,22 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="blueboat" family="$(arg family)">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="$(arg robot_name)" family="surface">
 
+  <xacro:arg name="robot_name" default="blueboat"/>
   <xacro:arg name="environment" default="real"/>
   <xacro:arg name="robot_namespace" default="blueboat"/>
   <xacro:arg name="family" default="surface"/>
   <xacro:arg name="lookup_csv" default="config/m200_lookup.csv"/>
-  <xacro:arg name="stonefish_topic" default="/$(arg robot_namespace)/controller/thruster_setpoints_sim"/>
+  <xacro:arg name="stonefish_topic" default="/$(arg robot_name)/controller/thruster_setpoints_sim"/>
 
-  <xacro:property name="robot_prefix" value="$(arg robot_namespace)/"/>
+  <xacro:property name="robot_prefix" value="$(arg robot_name)/"/>
+
+  <xacro:macro name="multibeam_detection_state_interfaces" params="index">
+    <state_interface name="detection_${index}.angle_rad"/>
+    <state_interface name="detection_${index}.time_of_flight_s"/>
+    <state_interface name="detection_${index}.power"/>
+    <state_interface name="detection_${index}.point_type"/>
+    <state_interface name="detection_${index}.reserved"/>
+  </xacro:macro>
 
   <!-- TF -->
 
@@ -48,6 +57,13 @@
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}altimeter_link"/>
     <origin xyz="-0.240439 0.067376 -0.35413" rpy="3.1416 0 1.57"/>
+  </joint>
+
+  <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
+  <joint name="${robot_prefix}multibeam_joint" type="fixed">
+    <parent link="${robot_prefix}base_link"/>
+    <child link="${robot_prefix}multibeam_link"/>
+    <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 1.57"/>
   </joint>
   <!-- Thrusters -->
 
@@ -116,7 +132,7 @@
       <param name="broadcaster">imu_broadcaster</param>
       <param name="read_rate_hz">200.0</param>
       <param name="frame_id">${robot_prefix}imu_link</param>
-      <param name="stonefish_topic">/$(arg robot_namespace)/stonefish/sensors/imu</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/imu</param>
       <param name="msg_type">sensor_msgs/msg/Imu</param>
       <state_interface name="orientation.x"/>
       <state_interface name="orientation.y"/>
@@ -135,7 +151,7 @@
       <param name="broadcaster">magnetometer_broadcaster</param>
       <param name="read_rate_hz">50.0</param>
       <param name="frame_id">${robot_prefix}imu_link</param>
-      <param name="stonefish_topic">/$(arg robot_namespace)/stonefish/sensors/magnetometer</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/magnetometer</param>
       <param name="msg_type">sensor_msgs/msg/MagneticField</param>
       <state_interface name="magnetic_field.x"/>
       <state_interface name="magnetic_field.y"/>
@@ -173,6 +189,130 @@
       <state_interface name="scan_length"/>
       <state_interface name="gain_setting"/>
     </sensor>
+
+    <xacro:if value="$(eval environment == 'real')">
+      <sensor name="multibeam_sensor">
+        <param name="interface">sura_hardware_interface/MultibeamInterface</param>
+        <param name="broadcaster">multibeam_broadcaster</param>
+        <param name="read_rate_hz">100.0</param>
+        <param name="frame_id">${robot_prefix}multibeam_link</param>
+        <param name="ip_address">192.168.1.86</param>
+        <param name="port">62312</param>
+        <param name="start_mm">0</param>
+        <param name="end_mm">0</param>
+        <param name="sound_speed_m_s">1500.0</param>
+        <param name="gain_index">-1</param>
+        <param name="msec_per_ping">200</param>
+        <param name="range_steps">400</param>
+        <param name="pulse_length_steps">1.5</param>
+        <param name="target_ping_hz">240000</param>
+        <param name="silence_timeout_s">3.0</param>
+
+        <state_interface name="ping_sequence"/>
+        <state_interface name="reception_time.sec"/>
+        <state_interface name="reception_time.nanosec"/>
+        <state_interface name="ping_number"/>
+        <state_interface name="power_up_time_ms"/>
+        <state_interface name="device_utc_time_ms_hi"/>
+        <state_interface name="device_utc_time_ms_lo"/>
+        <state_interface name="listening_time_s"/>
+        <state_interface name="sound_speed_m_s"/>
+        <state_interface name="acoustic_frequency_hz"/>
+        <state_interface name="pulse_duration_s"/>
+        <state_interface name="flags"/>
+        <state_interface name="reported_detection_count"/>
+        <state_interface name="stored_detection_count"/>
+        <state_interface name="truncated"/>
+        <xacro:multibeam_detection_state_interfaces index="0"/>
+        <xacro:multibeam_detection_state_interfaces index="1"/>
+        <xacro:multibeam_detection_state_interfaces index="2"/>
+        <xacro:multibeam_detection_state_interfaces index="3"/>
+        <xacro:multibeam_detection_state_interfaces index="4"/>
+        <xacro:multibeam_detection_state_interfaces index="5"/>
+        <xacro:multibeam_detection_state_interfaces index="6"/>
+        <xacro:multibeam_detection_state_interfaces index="7"/>
+        <xacro:multibeam_detection_state_interfaces index="8"/>
+        <xacro:multibeam_detection_state_interfaces index="9"/>
+        <xacro:multibeam_detection_state_interfaces index="10"/>
+        <xacro:multibeam_detection_state_interfaces index="11"/>
+        <xacro:multibeam_detection_state_interfaces index="12"/>
+        <xacro:multibeam_detection_state_interfaces index="13"/>
+        <xacro:multibeam_detection_state_interfaces index="14"/>
+        <xacro:multibeam_detection_state_interfaces index="15"/>
+        <xacro:multibeam_detection_state_interfaces index="16"/>
+        <xacro:multibeam_detection_state_interfaces index="17"/>
+        <xacro:multibeam_detection_state_interfaces index="18"/>
+        <xacro:multibeam_detection_state_interfaces index="19"/>
+        <xacro:multibeam_detection_state_interfaces index="20"/>
+        <xacro:multibeam_detection_state_interfaces index="21"/>
+        <xacro:multibeam_detection_state_interfaces index="22"/>
+        <xacro:multibeam_detection_state_interfaces index="23"/>
+        <xacro:multibeam_detection_state_interfaces index="24"/>
+        <xacro:multibeam_detection_state_interfaces index="25"/>
+        <xacro:multibeam_detection_state_interfaces index="26"/>
+        <xacro:multibeam_detection_state_interfaces index="27"/>
+        <xacro:multibeam_detection_state_interfaces index="28"/>
+        <xacro:multibeam_detection_state_interfaces index="29"/>
+        <xacro:multibeam_detection_state_interfaces index="30"/>
+        <xacro:multibeam_detection_state_interfaces index="31"/>
+        <xacro:multibeam_detection_state_interfaces index="32"/>
+        <xacro:multibeam_detection_state_interfaces index="33"/>
+        <xacro:multibeam_detection_state_interfaces index="34"/>
+        <xacro:multibeam_detection_state_interfaces index="35"/>
+        <xacro:multibeam_detection_state_interfaces index="36"/>
+        <xacro:multibeam_detection_state_interfaces index="37"/>
+        <xacro:multibeam_detection_state_interfaces index="38"/>
+        <xacro:multibeam_detection_state_interfaces index="39"/>
+        <xacro:multibeam_detection_state_interfaces index="40"/>
+        <xacro:multibeam_detection_state_interfaces index="41"/>
+        <xacro:multibeam_detection_state_interfaces index="42"/>
+        <xacro:multibeam_detection_state_interfaces index="43"/>
+        <xacro:multibeam_detection_state_interfaces index="44"/>
+        <xacro:multibeam_detection_state_interfaces index="45"/>
+        <xacro:multibeam_detection_state_interfaces index="46"/>
+        <xacro:multibeam_detection_state_interfaces index="47"/>
+        <xacro:multibeam_detection_state_interfaces index="48"/>
+        <xacro:multibeam_detection_state_interfaces index="49"/>
+        <xacro:multibeam_detection_state_interfaces index="50"/>
+        <xacro:multibeam_detection_state_interfaces index="51"/>
+        <xacro:multibeam_detection_state_interfaces index="52"/>
+        <xacro:multibeam_detection_state_interfaces index="53"/>
+        <xacro:multibeam_detection_state_interfaces index="54"/>
+        <xacro:multibeam_detection_state_interfaces index="55"/>
+        <xacro:multibeam_detection_state_interfaces index="56"/>
+        <xacro:multibeam_detection_state_interfaces index="57"/>
+        <xacro:multibeam_detection_state_interfaces index="58"/>
+        <xacro:multibeam_detection_state_interfaces index="59"/>
+        <xacro:multibeam_detection_state_interfaces index="60"/>
+        <xacro:multibeam_detection_state_interfaces index="61"/>
+        <xacro:multibeam_detection_state_interfaces index="62"/>
+        <xacro:multibeam_detection_state_interfaces index="63"/>
+        <state_interface name="attitude_sequence"/>
+        <state_interface name="up_vector.x"/>
+        <state_interface name="up_vector.y"/>
+        <state_interface name="up_vector.z"/>
+        <state_interface name="attitude_utc_time_ms_hi"/>
+        <state_interface name="attitude_utc_time_ms_lo"/>
+        <state_interface name="attitude_power_up_time_ms"/>
+        <state_interface name="water_sequence"/>
+        <state_interface name="water_valid"/>
+        <state_interface name="temperature_c"/>
+        <state_interface name="pressure_bar"/>
+        <state_interface name="transport_state"/>
+        <state_interface name="connected"/>
+        <state_interface name="valid_pings"/>
+        <state_interface name="reconnect_count"/>
+        <state_interface name="checksum_errors"/>
+        <state_interface name="malformed_packets"/>
+        <state_interface name="unknown_ids"/>
+        <state_interface name="truncated_pings"/>
+        <state_interface name="rx_bytes"/>
+        <state_interface name="tx_bytes"/>
+        <state_interface name="last_errno"/>
+        <state_interface name="seconds_since_last_rx"/>
+        <state_interface name="seconds_since_last_ping"/>
+      </sensor>
+    </xacro:if>
    
 
     <sensor name="gps_sensor">
@@ -183,7 +323,7 @@
       <param name="gps_serial_port">/dev/ttyAMA5</param>
       <param name="gps_baudrate">230400</param>
       <param name="frame_id">${robot_prefix}gps_frame</param>
-      <param name="stonefish_topic">/$(arg robot_namespace)/stonefish/sensors/gps</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/gps</param>
       <param name="msg_type">sensor_msgs/msg/NavSatFix</param>
       <state_interface name="gps.latitude"/>
       <state_interface name="gps.longitude"/>

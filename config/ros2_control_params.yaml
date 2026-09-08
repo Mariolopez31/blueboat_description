@@ -44,6 +44,9 @@
     altimeter_broadcaster:
       type: sura_sensors/AltimeterBlueboatBroadcaster
 
+    multibeam_broadcaster:
+      type: sura_sensors/MultibeamBroadcaster
+
     battery_broadcaster:
       type: sura_sensors/BatteryBroadcaster
 
@@ -74,12 +77,12 @@
     navigator_topic: /navigator_msg
     body_force_controller_name: body_force_controller
 
-    kp_u: 28.0
-    ki_u: 7.0
-    kd_u: 10.0
+    kp_u: 24.0
+    ki_u: 6.0
+    kd_u: 16.0
     integral_limit_u: 8.0
 
-    kp_r: 25.0
+    kp_r: 22.0
     ki_r: 3.0
     kd_r: 6.0
     integral_limit_r: 6.0
@@ -163,3 +166,15 @@
     field_of_view: 0.0
     min_range: 0.02
     max_range: 50.0
+
+/blueboat/controller/multibeam_broadcaster:
+  ros__parameters:
+    sensor_name: multibeam_sensor
+    frame_id: blueboat/multibeam_link
+    points_topic: sensors/multibeam/points
+    ping_topic: sensors/multibeam/ping
+    up_vector_topic: sensors/multibeam/attitude/up_vector
+    temperature_topic: sensors/multibeam/temperature
+    pressure_topic: sensors/multibeam/pressure
+    publish_period_s: 0.05
+    stale_timeout_s: 3.0

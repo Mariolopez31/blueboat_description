@@ -2,6 +2,7 @@ robot:
   name: blueboat
   family: surface
   environment: real
+  localization: real
 
 description:
   package: blueboat_description
@@ -57,5 +58,10 @@ diagnostics:
   enabled: true
   launch_package: sura_diagnostics
   launch_file: diagnostics.launch.py
-  profile: blueboat
-  config: config/diagnostics_blueboat.yaml
+  params_package: sura_diagnostics
+  params: config/blueboat_diagnostics.yaml
+
+imu:
+  raw_imu_topic: controller/imu_broadcaster/imu
+  filtered_imu_topic: sensors/imu
+  mag_topic: magnetometer_broadcaster/mag
