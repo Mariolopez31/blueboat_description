@@ -23,10 +23,34 @@
   <link name="${robot_prefix}base_link_enu" tf_type="base"/>
   <link name="${robot_prefix}base_link" tf_type="base"/>
 
+  <link name="${robot_prefix}base_link_visual">
+    <visual>
+      <origin xyz="0 0 0" rpy="3.1416 0 -1.5708"/>
+      <geometry>
+        <mesh filename="package://blueboat_description/meshes/blueboat.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="3.1416 0 -1.5708"/>
+      <geometry>
+        <mesh filename="package://blueboat_description/meshes/blueboat.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
+  </link>
+
   <joint name="${robot_prefix}enu_to_ned_joint" type="fixed">
     <parent link="${robot_prefix}base_link_enu"/>
     <child link="${robot_prefix}base_link"/>
     <origin xyz="0 0 0" rpy="3.14159265359 0 0"/>
+  </joint>
+
+  <joint name="${robot_prefix}base_link_visual_joint" type="fixed">
+    <parent link="${robot_prefix}base_link"/>
+    <child link="${robot_prefix}base_link_visual"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <!-- Sensors -->
@@ -35,7 +59,7 @@
   <joint name="${robot_prefix}imu_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}imu_link"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0.39 -0.36 -0.05" rpy="3.1416 0 1.57"/>
   </joint>
 
   <link name="${robot_prefix}lidar_front" tf_type="sensor"/>
@@ -49,21 +73,21 @@
   <joint name="${robot_prefix}gps_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}gps_frame"/>
-    <origin xyz="0.39 -0.36 -0.05" rpy="3.1416 0 1.57"/>
+    <origin xyz="0.39 0.36 -0.05" rpy="3.1416 0 1.57"/>
   </joint>
 
   <link name="${robot_prefix}altimeter_link" tf_type="sensor"/>
   <joint name="${robot_prefix}altimeter_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}altimeter_link"/>
-    <origin xyz="-0.240439 0.067376 -0.35413" rpy="3.1416 0 1.57"/>
+    <origin xyz="0.02 0.285 0.346" rpy="0 -1.57 0"/>
   </joint>
 
   <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
   <joint name="${robot_prefix}multibeam_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}multibeam_link"/>
-    <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 1.57"/>
+    <origin xyz="0.02 -0.285 0.346" rpy="3.1416 0 3.1416"/>
   </joint>
   <!-- Thrusters -->
 
@@ -71,14 +95,14 @@
   <joint name="${robot_prefix}left_thruster_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}left_thruster_link"/>
-    <origin xyz="-0.472 -0.28 0.0245" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.13 -0.3 0.286" rpy="0.0 0.0 3.14159265"/>
   </joint>
 
   <link name="${robot_prefix}right_thruster_link" tf_type="thruster"/>
   <joint name="${robot_prefix}right_thruster_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}right_thruster_link"/>
-    <origin xyz="-0.472 0.28 0.0245" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.15 0.27 0.286" rpy="0.0 0.0 3.14159265"/>
   </joint>
 
   <!-- Actuators -->
@@ -146,19 +170,6 @@
       <state_interface name="linear_acceleration.z"/>
     </sensor>
 
-    <sensor name="magnetometer_sensor">
-      <param name="interface">sura_hardware_interface/MagnetometerInterface</param>
-      <param name="broadcaster">magnetometer_broadcaster</param>
-      <param name="read_rate_hz">50.0</param>
-      <param name="frame_id">${robot_prefix}imu_link</param>
-      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/magnetometer</param>
-      <param name="msg_type">sensor_msgs/msg/MagneticField</param>
-      <state_interface name="magnetic_field.x"/>
-      <state_interface name="magnetic_field.y"/>
-      <state_interface name="magnetic_field.z"/>
-    </sensor>
-
-    
     <sensor name="battery_sensor">
       <param name="interface">sura_hardware_interface/BatteryInterface</param>
       <param name="broadcaster">battery_broadcaster</param>
@@ -198,14 +209,17 @@
         <param name="frame_id">${robot_prefix}multibeam_link</param>
         <param name="ip_address">192.168.1.86</param>
         <param name="port">62312</param>
-        <param name="start_mm">0</param>
-        <param name="end_mm">0</param>
+        <param name="start_mm">500</param>
+        <param name="end_mm">10000</param>
         <param name="sound_speed_m_s">1500.0</param>
         <param name="gain_index">-1</param>
         <param name="msec_per_ping">200</param>
         <param name="range_steps">400</param>
         <param name="pulse_length_steps">1.5</param>
         <param name="target_ping_hz">240000</param>
+        <param name="enable_atof_data">true</param>
+        <param name="enable_yz_point_data">false</param>
+        <param name="enable_channel_data">false</param>
         <param name="silence_timeout_s">3.0</param>
 
         <state_interface name="ping_sequence"/>
