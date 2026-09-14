@@ -6,8 +6,8 @@
       - thruster_test_controller
 
     usv_controllers:
-      - body_force_controller
-      - body_velocity_controller
+      - body_force
+      - body_velocity
       - body_position_controller
 
     hardware_components_initial_state:
@@ -23,10 +23,10 @@
     status_light_controller:
       type: forward_command_controller/ForwardCommandController
 
-    body_force_controller:
+    body_force:
       type: sura_controllers/usv/BodyForceController
     
-    body_velocity_controller:
+    body_velocity:
       type: sura_controllers/usv/BodyVelocityController
 
     body_position_controller:
@@ -63,19 +63,19 @@
       - blueboat/status_light_joint
     interface_name: enabled
 
-/blueboat/controller/body_force_controller:
+/blueboat/controller/body_force:
   ros__parameters:
-    input_topic: /body_force/command
+    input_topic: /blueboat/controller/body_force/command
     base_link: blueboat/base_link
     thruster_joints:
       - blueboat/left_thruster_joint
       - blueboat/right_thruster_joint
 
-/blueboat/controller/body_velocity_controller:
+/blueboat/controller/body_velocity:
   ros__parameters:
     cmd_vel_topic: /cmd_vel
     navigator_topic: /navigator_msg
-    body_force_controller_name: body_force_controller
+    body_force_controller_name: body_force
 
     kp_u: 24.0
     ki_u: 6.0
@@ -92,7 +92,7 @@
   ros__parameters:
     navigator_topic: /navigator_msg
     setpoint_topic: /body_position/setpoint
-    body_velocity_controller_name: body_velocity_controller
+    body_velocity_controller_name: body_velocity
 
     # APPROACH
     kp_position: 0.6

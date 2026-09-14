@@ -1,8 +1,8 @@
 robot:
   name: blueboat
   family: surface
-  environment: real
-  localization: real
+  environment: sim
+  localization: sim
 
 description:
   package: blueboat_description

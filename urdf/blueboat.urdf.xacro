@@ -10,13 +10,13 @@
 
   <xacro:property name="robot_prefix" value="$(arg robot_name)/"/>
 
-  <xacro:macro name="multibeam_detection_state_interfaces" params="index">
+  <!-- <xacro:macro name="multibeam_detection_state_interfaces" params="index">
     <state_interface name="detection_${index}.angle_rad"/>
     <state_interface name="detection_${index}.time_of_flight_s"/>
     <state_interface name="detection_${index}.power"/>
     <state_interface name="detection_${index}.point_type"/>
     <state_interface name="detection_${index}.reserved"/>
-  </xacro:macro>
+  </xacro:macro> -->
 
   <!-- TF -->
 
@@ -59,12 +59,12 @@
     <origin xyz="-0.240439 0.067376 -0.35413" rpy="3.1416 0 1.57"/>
   </joint>
 
-  <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
+  <!-- <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
   <joint name="${robot_prefix}multibeam_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}multibeam_link"/>
     <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 1.57"/>
-  </joint>
+  </joint> -->
   <!-- Thrusters -->
 
   <link name="${robot_prefix}left_thruster_link" tf_type="thruster"/>
@@ -83,14 +83,14 @@
 
   <!-- Actuators -->
 
-  <!--
+  
   <link name="${robot_prefix}status_light_link" tf_type="actuator"/>
   <joint name="${robot_prefix}status_light_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}status_light_link"/>
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
-  -->
+ 
 
   <!-- ROS2 CONTROL -->
 
@@ -161,11 +161,13 @@
     
     <sensor name="battery_sensor">
       <param name="interface">sura_hardware_interface/BatteryInterface</param>
+      <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/battery</param>
       <param name="broadcaster">battery_broadcaster</param>
       <param name="read_rate_hz">2.0</param>
-      <param name="frame_id">${robot_prefix}base_link</param>
+      <param name="frame_id">$(arg robot_name)/base_link</param>
       <state_interface name="voltage"/>
       <state_interface name="current"/>
+      <state_interface name="percentage"/>
       <state_interface name="present"/>
     </sensor>
 
@@ -190,7 +192,7 @@
       <state_interface name="gain_setting"/>
     </sensor>
 
-    <xacro:if value="$(eval environment == 'real')">
+    <!-- <xacro:if value="$(eval environment == 'real')">
       <sensor name="multibeam_sensor">
         <param name="interface">sura_hardware_interface/MultibeamInterface</param>
         <param name="broadcaster">multibeam_broadcaster</param>
@@ -312,7 +314,7 @@
         <state_interface name="seconds_since_last_rx"/>
         <state_interface name="seconds_since_last_ping"/>
       </sensor>
-    </xacro:if>
+    </xacro:if> -->
    
 
     <sensor name="gps_sensor">
