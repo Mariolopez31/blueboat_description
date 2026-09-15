@@ -65,7 +65,10 @@
 
 /blueboat/controller/body_force:
   ros__parameters:
+    debug.enabled: true
     input_topic: /blueboat/controller/body_force/command
+    output_topic: /blueboat/controller/body_force/output
+    wrench_output_topic: /blueboat/controller/body_force/wrench
     base_link: blueboat/base_link
     thruster_joints:
       - blueboat/left_thruster_joint
@@ -75,8 +78,12 @@
 
 /blueboat/controller/body_velocity:
   ros__parameters:
-    cmd_vel_topic: /cmd_vel
+    debug.enabled: true
+    setpoint_topic: /blueboat/controller/body_velocity/setpoint
     navigator_topic: /blueboat/navigator/navigation
+    feedforward_topic: /blueboat/controller/body_force/command
+    output_topic: /blueboat/controller/body_velocity/output
+    pid_terms_topic: /blueboat/controller/body_velocity/pid_terms
     body_force_controller_name: body_force
     debug.enabled: true
     debug.topic: /blueboat/controller/debug
