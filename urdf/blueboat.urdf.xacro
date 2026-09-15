@@ -20,12 +20,21 @@
 
   <!-- TF -->
 
+  <link name="${robot_prefix}base_link" tf_type="base">
+    <visual>
+      <geometry>
+        <mesh
+          filename="package://blueboat_description/meshes/blueboat.dae"
+          scale="1 1 1"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="3.1416 0 -1.5708"/>
+    </visual>
+  </link>
   <link name="${robot_prefix}base_link_enu" tf_type="base"/>
-  <link name="${robot_prefix}base_link" tf_type="base"/>
 
-  <joint name="${robot_prefix}enu_to_ned_joint" type="fixed">
-    <parent link="${robot_prefix}base_link_enu"/>
-    <child link="${robot_prefix}base_link"/>
+  <joint name="${robot_prefix}ned_to_enu_joint" type="fixed">
+    <parent link="${robot_prefix}base_link"/>
+    <child link="${robot_prefix}base_link_enu"/>
     <origin xyz="0 0 0" rpy="3.14159265359 0 0"/>
   </joint>
 
