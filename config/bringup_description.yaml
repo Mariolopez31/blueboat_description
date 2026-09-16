@@ -18,7 +18,7 @@ ros2_control:
   launch_package: sura_bringup
   launch_file: sura_controllers.launch.py
   params_package: blueboat_description
-  params: config/ros2_control_params.yaml
+  params: config/ros2_control_params_sim.yaml
 
 localization:
   enabled: true

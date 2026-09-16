@@ -8,7 +8,7 @@
     usv_controllers:
       - body_force
       - body_velocity
-      - body_position_controller
+      - position_hold
 
     hardware_components_initial_state:
       inactive:
@@ -29,8 +29,8 @@
     body_velocity:
       type: sura_controllers/usv/BodyVelocityController
 
-    body_position_controller:
-      type: sura_controllers/usv/BodyPositionController
+    position_hold:
+      type: sura_controllers/usv/PositionHoldController
 
     imu_broadcaster:
       type: imu_sensor_broadcaster/IMUSensorBroadcaster
@@ -73,7 +73,6 @@
     thruster_joints:
       - blueboat/left_thruster_joint
       - blueboat/right_thruster_joint
-    debug.enabled: true
     debug.topic: /blueboat/controller/debug
 
 /blueboat/controller/body_velocity:
@@ -85,27 +84,37 @@
     output_topic: /blueboat/controller/body_velocity/output
     pid_terms_topic: /blueboat/controller/body_velocity/pid_terms
     body_force_controller_name: body_force
-    debug.enabled: true
     debug.topic: /blueboat/controller/debug
 
-    kp_u: 24.0
-    ki_u: 6.0
-    kd_u: 16.0
+    kp_u: 150.0
+    ki_u: 30.0
+    kd_u: 0.0
     integral_limit_u: 8.0
 
-    kp_r: 22.0
-    ki_r: 3.0
-    kd_r: 6.0
+    kp_r: 150.0
+    ki_r: 30.0
+    kd_r: 0.0
     integral_limit_r: 6.0
 
 
-/blueboat/controller/body_position_controller:
+/blueboat/controller/position_hold:
   ros__parameters:
-    navigator_topic: /blueboat/navigator/navigation
-    setpoint_topic: /blueboat/controller/body_position/setpoint
-    body_velocity_controller_name: body_velocity
     debug.enabled: true
+    setpoint_topic: /blueboat/controller/position_hold/setpoint
+    feedforward_topic: /blueboat/controller/position_hold/feedforward
+    reposition_feedforward_topic: /blueboat/controller/position_hold/reposition_feedforward
+    navigator_topic: /blueboat/navigator/navigation
+    output_topic: /blueboat/controller/position_hold/output
+    pid_terms_topic: /blueboat/controller/position_hold/pid_terms
+    threshold_markers_topic: /blueboat/controller/position_hold/threshold_markers
+    body_velocity_controller_name: body_velocity
+    body_velocity_setpoint_topic: /blueboat/controller/body_velocity/setpoint
+    setpoint_frame_id: world_ned
     debug.topic: /blueboat/controller/debug
+
+    linear_feedforward_threshold: 0.001
+    angular_feedforward_threshold: 0.001
+    feedforward_timeout: 0.25
 
     # APPROACH
     kp_position: 0.6
@@ -124,8 +133,6 @@
 
     reverse_distance_threshold: 1.0
     max_reverse_speed: 0.0
-
-    yaw_command_sign: -1.0
 
     # HOLD
     hold_position_deadband: 0.12
