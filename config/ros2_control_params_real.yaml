@@ -73,7 +73,6 @@
     thruster_joints:
       - blueboat/left_thruster_joint
       - blueboat/right_thruster_joint
-    debug.enabled: true
     debug.topic: /blueboat/controller/debug
 
 /blueboat/controller/body_velocity:
@@ -85,17 +84,16 @@
     output_topic: /blueboat/controller/body_velocity/output
     pid_terms_topic: /blueboat/controller/body_velocity/pid_terms
     body_force_controller_name: body_force
-    debug.enabled: true
     debug.topic: /blueboat/controller/debug
 
-    kp_u: 24.0
-    ki_u: 6.0
-    kd_u: 16.0
+    kp_u: 150.0
+    ki_u: 30.0
+    kd_u: 0.0
     integral_limit_u: 8.0
 
-    kp_r: -22.0
-    ki_r: -3.0
-    kd_r: -6.0
+    kp_r: 150.0
+    ki_r: 30.0
+    kd_r: 0.0
     integral_limit_r: 6.0
 
 

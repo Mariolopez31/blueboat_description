@@ -10,13 +10,13 @@
 
   <xacro:property name="robot_prefix" value="$(arg robot_name)/"/>
 
-  <!-- <xacro:macro name="multibeam_detection_state_interfaces" params="index">
+  <xacro:macro name="multibeam_detection_state_interfaces" params="index">
     <state_interface name="detection_${index}.angle_rad"/>
     <state_interface name="detection_${index}.time_of_flight_s"/>
     <state_interface name="detection_${index}.power"/>
     <state_interface name="detection_${index}.point_type"/>
     <state_interface name="detection_${index}.reserved"/>
-  </xacro:macro> -->
+  </xacro:macro>
 
   <!-- TF -->
 
@@ -68,12 +68,12 @@
     <origin xyz="-0.240439 0.067376 -0.35413" rpy="3.1416 0 1.57"/>
   </joint>
 
-  <!-- <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
+  <link name="${robot_prefix}multibeam_link" tf_type="sensor"/>
   <joint name="${robot_prefix}multibeam_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}multibeam_link"/>
     <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 1.57"/>
-  </joint> -->
+  </joint>
   <!-- Thrusters -->
 
   <link name="${robot_prefix}left_thruster_link" tf_type="thruster"/>
@@ -201,7 +201,7 @@
       <state_interface name="gain_setting"/>
     </sensor>
 
-    <!-- <xacro:if value="$(eval environment == 'real')">
+    <xacro:if value="$(eval environment == 'real')">
       <sensor name="multibeam_sensor">
         <param name="interface">sura_hardware_interface/MultibeamInterface</param>
         <param name="broadcaster">multibeam_broadcaster</param>
@@ -323,7 +323,7 @@
         <state_interface name="seconds_since_last_rx"/>
         <state_interface name="seconds_since_last_ping"/>
       </sensor>
-    </xacro:if> -->
+    </xacro:if>
    
 
     <sensor name="gps_sensor">
