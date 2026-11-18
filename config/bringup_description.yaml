@@ -25,7 +25,11 @@ localization:
   mode: surface_fastlio
   launch_package: sura_localization
   launch_file: surface_fastlio.launch.py
-  publish_tf: true
+  publish_tf: false
+  datum:
+    latitude: 41.7777
+    longitude: 3.0333
+    heading: 0.0
 
 navigation:
   enabled: true

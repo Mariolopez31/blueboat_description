@@ -3,7 +3,17 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /TF1
+        - /TF1/Status1
+        - /PointCloud21
+        - /MarkerArray3
+        - /MarkerArray3/Topic1
+        - /MarkerArray3/Namespaces1
+        - /Map1
+        - /Map2
       Splitter Ratio: 0.5676470398902893
     Tree Height: 549
   - Class: rviz_common/Selection
@@ -23,7 +33,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: PointCloud2
 Visualization Manager:
   Class: ""
   Displays:
@@ -45,13 +55,6 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: rviz_default_plugins/Axes
-      Enabled: true
-      Length: 4
-      Name: Axes
-      Radius: 0.5
-      Reference Frame: <Fixed Frame>
-      Value: true
     - Class: rviz_default_plugins/TF
       Enabled: true
       Frame Timeout: 15
@@ -63,6 +66,10 @@ Visualization Manager:
           Value: true
         blueboat/base_link_enu:
           Value: true
+        blueboat/base_link_urdf:
+          Value: true
+        blueboat/camera_link:
+          Value: true
         blueboat/gps_frame:
           Value: true
         blueboat/imu_link:
@@ -71,15 +78,15 @@ Visualization Manager:
           Value: true
         blueboat/lidar_front:
           Value: true
+        blueboat/map:
+          Value: true
+        blueboat/multibeam_link:
+          Value: true
         blueboat/right_thruster_link:
           Value: true
         blueboat/status_light_link:
           Value: true
-        blueboat_camera_link:
-          Value: true
-        cirtesu_tank:
-          Value: true
-        gps_frame:
+        local_enu:
           Value: true
         world_enu:
           Value: true
@@ -91,32 +98,34 @@ Visualization Manager:
       Show Axes: true
       Show Names: false
       Tree:
-        world_ned:
-          blueboat/base_link:
-            blueboat/altimeter_link:
-              {}
+        world_enu:
+          blueboat/map:
             blueboat/base_link_enu:
-              {}
-            blueboat/gps_frame:
-              {}
-            blueboat/imu_link:
-              {}
-            blueboat/left_thruster_link:
-              {}
-            blueboat/lidar_front:
-              {}
-            blueboat/right_thruster_link:
-              {}
-            blueboat/status_light_link:
-              {}
-            blueboat_camera_link:
-              {}
-            gps_frame:
-              {}
-          cirtesu_tank:
+              blueboat/base_link:
+                blueboat/altimeter_link:
+                  {}
+                blueboat/base_link_urdf:
+                  {}
+                blueboat/camera_link:
+                  {}
+                blueboat/gps_frame:
+                  {}
+                blueboat/imu_link:
+                  {}
+                blueboat/left_thruster_link:
+                  {}
+                blueboat/lidar_front:
+                  {}
+                blueboat/multibeam_link:
+                  {}
+                blueboat/right_thruster_link:
+                  {}
+                blueboat/status_light_link:
+                  {}
+          local_enu:
             {}
-          world_enu:
-            {}
+        world_ned:
+          {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -166,6 +175,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        blueboat/multibeam_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         blueboat/right_thruster_link:
           Alpha: 1
           Show Axes: false
@@ -186,7 +199,6 @@ Visualization Manager:
       Blocks: 1
       Class: rviz_satellite/AerialMap
       Draw Behind: true
-      ENU Reference Frame: world_enu
       Enabled: true
       Name: AerialMap
       Object URI: https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}
@@ -198,14 +210,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /world_ned_frame/gps
-      Use Local Map:
-        Meter per Pixel (Zoom 0): 0
-        Origin CRS: ""
-        "Origin X ": 0
-        "Origin Y ": 0
-        Value: false
       Value: true
-      Visualize in UTM Frame: false
       Zoom: 20
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
@@ -256,11 +261,20 @@ Visualization Manager:
       Show Descriptions: true
       Show Visual Aids: false
       Value: true
+    - Class: rviz_default_plugins/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Interactive Markers Namespace: /blueboat/nav2/interactive_markers
+      Name: Nav2 Goal
+      Show Axes: false
+      Show Descriptions: false
+      Show Visual Aids: true
+      Value: true
     - Class: rviz_default_plugins/MarkerArray
       Enabled: true
       Name: MarkerArray
       Namespaces:
-        position_hold_thresholds: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
@@ -268,10 +282,141 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /blueboat/controller/position_hold/threshold_markers
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 226
+      Min Color: 0; 0; 0
+      Min Intensity: 23
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.05000000074505806
+      Style: Flat Squares
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/livox/points
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray
+      Namespaces:
+        map: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/occupied_cells_vis_array
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: true
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/projected_map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/projected_map_updates
+      Use Timestamp: false
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz_default_plugins/Path
+      Color: 25; 255; 0
+      Enabled: true
+      Head Diameter: 0.30000001192092896
+      Head Length: 0.20000000298023224
+      Length: 0.30000001192092896
+      Line Style: Lines
+      Line Width: 0.029999999329447746
+      Name: Path
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 255; 85; 255
+      Pose Style: None
+      Radius: 0.029999999329447746
+      Shaft Diameter: 0.10000000149011612
+      Shaft Length: 0.10000000149011612
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/plan
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/PointStamped
+      Color: 204; 41; 204
+      Enabled: true
+      History Length: 1
+      Name: PointStamped
+      Radius: 0.20000000298023224
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /clicked_point
+      Value: true
+    - Alpha: 0.699999988079071
+      Class: rviz_default_plugins/Map
+      Color Scheme: costmap
+      Draw Behind: false
+      Enabled: true
+      Name: Map
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/global_costmap/costmap
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /blueboat/global_costmap/costmap_updates
+      Use Timestamp: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: world_ned
+    Fixed Frame: blueboat/map
     Frame Rate: 30
   Name: root
   Tools:
@@ -314,25 +459,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 55.16230010986328
+      Distance: 124.66549682617188
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 8.584802627563477
-        Y: -10.248351097106934
-        Z: -1.3614306449890137
+        X: -4.030516624450684
+        Y: 4.826948165893555
+        Z: -2.9072399139404297
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
-      Invert Z Axis: true
+      Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5547963380813599
+      Pitch: 1.0947967767715454
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.6303975582122803
+      Yaw: 4.235416889190674
     Saved: ~
 Window Geometry:
   Displays:
@@ -340,7 +485,7 @@ Window Geometry:
   Height: 846
   Hide Left Dock: false
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd000000040000000000000156000002b0fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000002b0000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002b0fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d000002b0000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b0000002fb00fffffffb0000000800540069006d0065010000000000000450000000000000000000000354000002b000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016d000002b0fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000002b0000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002b0fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d000002b0000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004b00000003efc0100000002fb0000000800540069006d00650100000000000004b0000002fb00fffffffb0000000800540069006d006501000000000000045000000000000000000000033d000002b000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:

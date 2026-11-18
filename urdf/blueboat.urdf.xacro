@@ -32,9 +32,9 @@
   </link>
   <link name="${robot_prefix}base_link_enu" tf_type="base"/>
 
-  <joint name="${robot_prefix}ned_to_enu_joint" type="fixed">
-    <parent link="${robot_prefix}base_link"/>
-    <child link="${robot_prefix}base_link_enu"/>
+  <joint name="${robot_prefix}enu_to_ned_joint" type="fixed">
+    <parent link="${robot_prefix}base_link_enu"/>
+    <child link="${robot_prefix}base_link"/>
     <origin xyz="0 0 0" rpy="3.14159265359 0 0"/>
   </joint>
 
@@ -72,7 +72,7 @@
   <joint name="${robot_prefix}multibeam_joint" type="fixed">
     <parent link="${robot_prefix}base_link"/>
     <child link="${robot_prefix}multibeam_link"/>
-    <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 1.57"/>
+    <origin xyz="-0.240439 -0.067376 -0.35413" rpy="3.1416 0 0.0"/>
   </joint>
   <!-- Thrusters -->
 
@@ -153,6 +153,8 @@
       <state_interface name="linear_acceleration.x"/>
       <state_interface name="linear_acceleration.y"/>
       <state_interface name="linear_acceleration.z"/>
+      <state_interface name="sample_time.sec"/>
+      <state_interface name="sample_time.nanosec"/>
     </sensor>
 
     <sensor name="magnetometer_sensor">
@@ -165,6 +167,8 @@
       <state_interface name="magnetic_field.x"/>
       <state_interface name="magnetic_field.y"/>
       <state_interface name="magnetic_field.z"/>
+      <state_interface name="sample_time.sec"/>
+      <state_interface name="sample_time.nanosec"/>
     </sensor>
 
     
@@ -201,12 +205,14 @@
       <state_interface name="gain_setting"/>
     </sensor>
 
-    <xacro:if value="$(eval environment == 'real')">
       <sensor name="multibeam_sensor">
         <param name="interface">sura_hardware_interface/MultibeamInterface</param>
         <param name="broadcaster">multibeam_broadcaster</param>
         <param name="read_rate_hz">100.0</param>
         <param name="frame_id">${robot_prefix}multibeam_link</param>
+        <xacro:if value="$(eval environment == 'sim')">
+          <param name="sim_topic">/$(arg robot_name)/multibeam</param>
+        </xacro:if>
         <param name="ip_address">192.168.1.86</param>
         <param name="port">62312</param>
         <param name="start_mm">0</param>
@@ -323,8 +329,7 @@
         <state_interface name="seconds_since_last_rx"/>
         <state_interface name="seconds_since_last_ping"/>
       </sensor>
-    </xacro:if>
-   
+
 
     <sensor name="gps_sensor">
       <param name="interface">sura_hardware_interface/GpsInterface</param>

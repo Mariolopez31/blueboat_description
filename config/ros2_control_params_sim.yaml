@@ -11,11 +11,10 @@
       - position_hold
 
     hardware_components_initial_state:
-      inactive:
-        - blueboat_actuators
       active:
         - blueboat_thrusters
         - blueboat_sensors
+        - blueboat_actuators
 
     thruster_test_controller:
       type: forward_command_controller/ForwardCommandController
@@ -67,6 +66,7 @@
   ros__parameters:
     debug.enabled: true
     input_topic: /blueboat/controller/body_force/command
+    direct_command_topic: /blueboat/controller/body_force/direct_command
     output_topic: /blueboat/controller/body_force/output
     wrench_output_topic: /blueboat/controller/body_force/wrench
     base_link: blueboat/base_link
@@ -167,8 +167,9 @@
 
 /blueboat/controller/gps_broadcaster:
   ros__parameters:
+    update_rate: 1
     sensor_name: gps_sensor
-    frame_id: gps_frame
+    frame_id: blueboat/gps_frame
     topic_name: /blueboat/sensors/gps
     position_covariance: 0.0
 
